@@ -1,12 +1,11 @@
-# WebhookRouter.dev 🚦
+# WebhookRouter.dev
 
 **Instant, reliable, and private – a webhook router developers can trust.**  
 Receive, filter, transform and forward webhooks — without maintaining your own infrastructure.
 
 ## 🚧 Status
 
-🛠 This project is in early development.
-
+🛠 This project is in early development.  
 We're building the first MVP and are looking for early users and feedback.
 
 🔔 **[Join the Beta](https://webhookrouter.dev#join)**  
@@ -68,12 +67,11 @@ Open source contributions will be considered later — stay tuned!
 
 ## 📬 Contact
 
-👨‍💻 Developed by Jens Zeltner
+👨‍💻 Developed by Jens Zeltner  
 📫 Questions, feedback or testing request? → [info@webhookrouter.dev](mailto:info@webhookrouter.dev)
 
 ---
 
 ## 📜 License
 
-Licensing model is being finalized. An **open-source core** is planned – details will follow before public release.
-Until then, all rights reserved.
+Licensing model is being finalized. An **open-source core** is planned – details will follow before public release. Until then, all rights reserved.
