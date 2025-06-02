@@ -12,7 +12,7 @@ import (
 	"github.com/webhookrouter/webhookrouter/internal/app"
 	"github.com/webhookrouter/webhookrouter/internal/common"
 	"github.com/webhookrouter/webhookrouter/internal/config"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain"
+	"github.com/webhookrouter/webhookrouter/internal/core/domain/endpoint"
 	"github.com/webhookrouter/webhookrouter/internal/core/services"
 )
 
@@ -27,6 +27,7 @@ func InitApplication(ctx context.Context, cfg config.Config, logger zerolog.Logg
 	dispatcher := httpclient.NewDispatcher(logger)
 	router := services.NewRouter(
 		dispatcher, postgres,
+		logger,
 	)
 	httpserver := httpserver.NewHttpServer(cfg.HttpServer, logger, router)
 	// Initialize the application
@@ -49,13 +50,35 @@ func InitTestApplication(ctx context.Context, cfg config.Config, logger zerolog.
 		logger.Fatal().Err(err).Msg("Failed to initialize InMemory store")
 	}
 
-	inmemory.Save(&domain.Endpoint{
+	inmemory.Save(&endpoint.Endpoint{
 		ID:       "test-endpoint",
-		TenantID: "test-tenant"})
+		TenantID: "test-tenant",
+		Destinations: []endpoint.Destination{
+			{
+				URL:    "http://localhost:8081/dest1",
+				Method: "POST",
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+				Timeout: 5000,
+				Enabled: true,
+			},
+			{
+				URL:    "http://localhost:8081/dest2",
+				Method: "POST",
+				Headers: map[string]string{
+					"Content-Type": "application/json",
+				},
+				Timeout: 5000,
+				Enabled: true,
+			},
+		},
+	})
 
 	dispatcher := dummy.NewDispatcher(logger)
 	router := services.NewRouter(
 		dispatcher, inmemory,
+		logger,
 	)
 	httpserver := httpserver.NewHttpServer(cfg.HttpServer, logger, router)
 	// Initialize the application for testing

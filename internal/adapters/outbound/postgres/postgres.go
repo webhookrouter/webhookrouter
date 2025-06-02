@@ -5,7 +5,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain"
+	"github.com/webhookrouter/webhookrouter/internal/core/domain/endpoint"
 )
 
 type PostgresStore struct {
@@ -32,7 +32,7 @@ func NewPostgresStore(cfg Config, logger zerolog.Logger) (*PostgresStore, error)
 	}, nil
 }
 
-func (p *PostgresStore) FindByID(id string) (*domain.Endpoint, error) {
+func (p *PostgresStore) FindByID(id string) (*endpoint.Endpoint, error) {
 	p.logger.Info().Str("id", id).Msg("Finding endpoint by ID")
 	return nil, nil
 }
@@ -43,7 +43,7 @@ func (p *PostgresStore) Delete(id string) error {
 	return nil
 }
 
-func (p *PostgresStore) Save(endpoint *domain.Endpoint) error {
+func (p *PostgresStore) Save(endpoint *endpoint.Endpoint) error {
 	p.logger.Info().Str("id", endpoint.ID).Msg("Saving endpoint")
 	return nil
 }

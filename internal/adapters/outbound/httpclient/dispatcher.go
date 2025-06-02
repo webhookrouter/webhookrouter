@@ -2,7 +2,8 @@ package httpclient
 
 import (
 	"github.com/rs/zerolog"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain"
+	"github.com/webhookrouter/webhookrouter/internal/core/domain/endpoint"
+	"github.com/webhookrouter/webhookrouter/internal/core/domain/webhook"
 )
 
 type Dispatcher struct {
@@ -14,8 +15,8 @@ func NewDispatcher(logger zerolog.Logger) *Dispatcher {
 		logger: logger.With().Str("component", "httpclient").Logger(),
 	}
 }
-func (d *Dispatcher) Dispatch(webhook *domain.Webhook) error {
-	d.logger.Info().Str("webhook", webhook.ID).Msg("Dispatching webhook")
+func (d *Dispatcher) Dispatch(webhook *webhook.Webhook, destination endpoint.Destination) error {
+	d.logger.Info().Str("webhook", webhook.ID).Str("destination", destination.URL).Msg("Dispatching webhook")
 	return nil
 }
 func (d *Dispatcher) Shutdown() error {

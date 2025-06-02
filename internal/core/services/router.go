@@ -1,16 +1,19 @@
 package services
 
 import (
+	"github.com/rs/zerolog"
 	"github.com/webhookrouter/webhookrouter/internal/core/domain"
+	"github.com/webhookrouter/webhookrouter/internal/core/domain/webhook"
 	"github.com/webhookrouter/webhookrouter/internal/core/ports/outbound"
 )
 
 type Router struct {
 	dispatcher    outbound.WebhookDispatcher
 	endpointStore outbound.EndpointStore
+	logger        zerolog.Logger
 }
 
-func NewRouter(dispatcher outbound.WebhookDispatcher, endpointStore outbound.EndpointStore) *Router {
+func NewRouter(dispatcher outbound.WebhookDispatcher, endpointStore outbound.EndpointStore, logger zerolog.Logger) *Router {
 	if dispatcher == nil {
 		panic("WebhookDispatcher cannot be nil")
 	}
@@ -20,10 +23,11 @@ func NewRouter(dispatcher outbound.WebhookDispatcher, endpointStore outbound.End
 	return &Router{
 		dispatcher:    dispatcher,
 		endpointStore: endpointStore,
+		logger:        logger.With().Str("component", "router").Logger(),
 	}
 }
 
-func (r *Router) Route(w *domain.Webhook) error {
+func (r *Router) Route(w *webhook.Webhook) error {
 
 	ep, err := r.endpointStore.FindByID(w.EndpointID)
 	if err != nil {
@@ -33,6 +37,20 @@ func (r *Router) Route(w *domain.Webhook) error {
 		return domain.ErrEndpointNotFound
 	}
 
-	// Call the handler to process the webhook
-	return r.dispatcher.Dispatch(w)
+	for _, dest := range ep.Destinations {
+		if dest.Enabled == false {
+			// Skip disabled destinations
+			r.logger.Debug().Str("destination", dest.URL).Msg("Skipping disabled destination")
+			continue
+		}
+		// Call the handler to process the webhook
+		err := r.dispatcher.Dispatch(w, dest)
+		if err != nil {
+			// Log the error and continue processing other destinations
+			r.logger.Error().Err(err)
+		}
+
+	}
+	return nil
+
 }

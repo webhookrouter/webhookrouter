@@ -2,12 +2,12 @@ package inmemory
 
 import (
 	"github.com/rs/zerolog"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain"
+	"github.com/webhookrouter/webhookrouter/internal/core/domain/endpoint"
 )
 
 type InMemoryStore struct {
 	logger    zerolog.Logger
-	endpoints map[string]*domain.Endpoint
+	endpoints map[string]*endpoint.Endpoint
 }
 type Config struct{}
 
@@ -15,10 +15,10 @@ func NewInMemoryStore(cfg Config, logger zerolog.Logger) (*InMemoryStore, error)
 	// Initialize the in-memory store with an empty map for endpoints
 	return &InMemoryStore{
 		logger:    logger.With().Str("component", "inmemory").Logger(),
-		endpoints: make(map[string]*domain.Endpoint),
+		endpoints: make(map[string]*endpoint.Endpoint),
 	}, nil
 }
-func (i *InMemoryStore) FindByID(id string) (*domain.Endpoint, error) {
+func (i *InMemoryStore) FindByID(id string) (*endpoint.Endpoint, error) {
 	i.logger.Debug().Str("id", id).Msg("Finding endpoint by ID")
 	endpoint, exists := i.endpoints[id]
 	if !exists {
@@ -34,7 +34,7 @@ func (i *InMemoryStore) Delete(id string) error {
 	delete(i.endpoints, id)
 	return nil
 }
-func (i *InMemoryStore) Save(endpoint *domain.Endpoint) error {
+func (i *InMemoryStore) Save(endpoint *endpoint.Endpoint) error {
 	i.logger.Debug().Str("id", endpoint.ID).Msg("Saving endpoint")
 	if endpoint == nil {
 		return nil // or return an error if preferred

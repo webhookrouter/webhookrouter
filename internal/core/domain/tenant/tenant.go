@@ -1,4 +1,4 @@
-package domain
+package tenant
 
 type Tenant struct {
 	ID   string // Unique identifier for the tenant

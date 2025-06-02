@@ -1,7 +1,9 @@
 package inbound
 
-import "github.com/webhookrouter/webhookrouter/internal/core/domain"
+import (
+	"github.com/webhookrouter/webhookrouter/internal/core/domain/webhook"
+)
 
 type WebhookRouter interface {
-	Route(webhook *domain.Webhook) error
+	Route(webhook *webhook.Webhook) error
 }
