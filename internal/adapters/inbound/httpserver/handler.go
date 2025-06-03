@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain/webhook"
+	"github.com/webhookrouter/webhookrouter/internal/domain/webhook"
 )
 
 func (s *HttpServer) handleWebhook(w http.ResponseWriter, r *http.Request) {
@@ -29,7 +29,7 @@ func (s *HttpServer) handleWebhook(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Call the router to handle the webhook event
-	if err := s.webhookRouter.Route(&webhook.Webhook{
+	if err := s.webhookService.Route(&webhook.Webhook{
 		ID:         webhook.CreateId(),
 		EndpointID: chi.URLParam(r, "endpointId"),
 		ReceivedAt: time.Now(),

@@ -2,8 +2,8 @@ package dummy
 
 import (
 	"github.com/rs/zerolog"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain/endpoint"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain/webhook"
+	"github.com/webhookrouter/webhookrouter/internal/domain/endpoint"
+	"github.com/webhookrouter/webhookrouter/internal/domain/webhook"
 )
 
 type Dispatcher struct {

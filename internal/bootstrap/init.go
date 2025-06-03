@@ -12,8 +12,8 @@ import (
 	"github.com/webhookrouter/webhookrouter/internal/app"
 	"github.com/webhookrouter/webhookrouter/internal/common"
 	"github.com/webhookrouter/webhookrouter/internal/config"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain/endpoint"
-	"github.com/webhookrouter/webhookrouter/internal/core/services"
+	"github.com/webhookrouter/webhookrouter/internal/domain/endpoint"
+	"github.com/webhookrouter/webhookrouter/internal/domain/webhook"
 )
 
 func InitApplication(ctx context.Context, cfg config.Config, logger zerolog.Logger) *app.Application {
@@ -25,11 +25,11 @@ func InitApplication(ctx context.Context, cfg config.Config, logger zerolog.Logg
 	}
 
 	dispatcher := httpclient.NewDispatcher(logger)
-	router := services.NewRouter(
+	webhookService := webhook.NewService(
 		dispatcher, postgres,
 		logger,
 	)
-	httpserver := httpserver.NewHttpServer(cfg.HttpServer, logger, router)
+	httpserver := httpserver.NewHttpServer(cfg.HttpServer, logger, webhookService)
 	// Initialize the application
 	application := app.NewApplication(logger,
 		httpserver,
@@ -76,11 +76,11 @@ func InitTestApplication(ctx context.Context, cfg config.Config, logger zerolog.
 	})
 
 	dispatcher := dummy.NewDispatcher(logger)
-	router := services.NewRouter(
+	webhookService := webhook.NewService(
 		dispatcher, inmemory,
 		logger,
 	)
-	httpserver := httpserver.NewHttpServer(cfg.HttpServer, logger, router)
+	httpserver := httpserver.NewHttpServer(cfg.HttpServer, logger, webhookService)
 	// Initialize the application for testing
 	application := app.NewApplication(logger,
 		httpserver,

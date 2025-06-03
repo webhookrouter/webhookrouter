@@ -2,7 +2,7 @@ package inmemory
 
 import (
 	"github.com/rs/zerolog"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain/endpoint"
+	"github.com/webhookrouter/webhookrouter/internal/domain/endpoint"
 )
 
 type InMemoryStore struct {

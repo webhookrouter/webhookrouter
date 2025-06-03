@@ -9,3 +9,9 @@ type Destination struct {
 	Timeout int               // Timeout in seconds for the webhook request
 	Enabled bool              // Indicates if the destination is enabled or not
 }
+
+type Endpoint struct {
+	ID           string        // Unique identifier for the endpoint
+	TenantID     string        // ID of the tenant this endpoint belongs to
+	Destinations []Destination // List of destinations associated with this endpoint
+}

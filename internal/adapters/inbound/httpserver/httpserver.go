@@ -6,25 +6,25 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog"
-	"github.com/webhookrouter/webhookrouter/internal/core/ports/inbound"
+	"github.com/webhookrouter/webhookrouter/internal/domain/webhook"
 )
 
 type HttpServer struct {
-	config        Config
-	logger        zerolog.Logger
-	webhookRouter inbound.WebhookRouter
-	chi           *chi.Mux
+	config         Config
+	logger         zerolog.Logger
+	webhookService webhook.WebhookService
+	chi            *chi.Mux
 }
 
 type Config struct {
 	Port int
 }
 
-func NewHttpServer(config Config, logger zerolog.Logger, router inbound.WebhookRouter) *HttpServer {
+func NewHttpServer(config Config, logger zerolog.Logger, webhookService webhook.WebhookService) *HttpServer {
 	return &HttpServer{
-		config:        config,
-		logger:        logger.With().Str("component", "httpserver").Logger(),
-		webhookRouter: router,
+		config:         config,
+		logger:         logger.With().Str("component", "httpserver").Logger(),
+		webhookService: webhookService,
 	}
 }
 

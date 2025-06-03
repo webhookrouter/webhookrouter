@@ -5,7 +5,7 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/rs/zerolog"
-	"github.com/webhookrouter/webhookrouter/internal/core/domain/endpoint"
+	"github.com/webhookrouter/webhookrouter/internal/domain/endpoint"
 )
 
 type PostgresStore struct {
